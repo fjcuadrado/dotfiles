@@ -4,9 +4,16 @@
 PWD = `pwd`
 
 
-all: vim-install
+all: gitconfig-install vim-install
 
-clean: vim-uninstall
+clean: gitconfig-uninstall vim-uninstall
+
+
+gitconfig-install:
+	@ln -fs ${PWD}/git/gitconfig ~/.gitconfig
+
+gitconfig-uninstall:
+	-@rm -f ~/.gitconfig
 
 vim-plugins:
 	@git submodule init
