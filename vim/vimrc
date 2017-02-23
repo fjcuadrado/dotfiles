@@ -86,3 +86,39 @@ autocmd BufNewFile,BufRead *.var set filetype=sh
 
 "Set filetype C to header files
 autocmd BufNewFile,BufRead *.h set filetype=c
+
+"Lightline configuration
+let g:lightline = {
+    \   'active': {
+    \       'left': [
+    \           ['mode', 'paste'],
+    \           ['filename'],
+    \           ['fugitive']
+    \       ],
+    \       'right': [
+    \           ['lineinfo'],
+    \           ['fileformat', 'fileencoding'],
+    \           ['filetype']
+    \       ]
+    \   },
+    \   'component_function': {
+    \       'filename': 'LightlineFilename',
+    \       'fugitive': 'LightlineFugitive',
+    \   }
+    \ }
+
+function! LightlineFilename()
+    let filename = expand('%t')
+    return (&readonly ? '[RO] ' : '')
+           \ . (empty(filename) ? '[No name]' : filename)
+           \ . (&modified ? ' +' : '')
+endfunction
+
+function! LightlineFugitive()
+    if exists('*fugitive#head')
+        let branch = fugitive#head()
+        let mark = ''
+        return branch !=# '-' ? mark.branch : ''
+    endif
+    return ''
+endfunction
