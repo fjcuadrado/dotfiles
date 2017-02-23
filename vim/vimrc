@@ -87,6 +87,12 @@ autocmd BufNewFile,BufRead *.var set filetype=sh
 "Set filetype C to header files
 autocmd BufNewFile,BufRead *.h set filetype=c
 
+"ALE configuration
+let g:ale_sign_error = '●'
+let g:ale_sign_warning = '●'
+let g:ale_statusline_format = ['✗ %d', '! %d', '✓']
+let g:ale_echo_msg_format = '[%linter%] %s'
+
 "Lightline configuration
 let g:lightline = {
     \   'active': {
@@ -103,6 +109,7 @@ let g:lightline = {
     \   },
     \   'component_function': {
     \       'filename': 'LightlineFilename',
+    \       'filetype': 'LightlineFiletype',
     \       'fugitive': 'LightlineFugitive',
     \   }
     \ }
@@ -112,6 +119,11 @@ function! LightlineFilename()
     return (&readonly ? '[RO] ' : '')
            \ . (empty(filename) ? '[No name]' : filename)
            \ . (&modified ? ' +' : '')
+endfunction
+
+function! LightlineFiletype()
+    let ale_status = ALEGetStatusLine()
+    return ale_status . ' ' . &ft
 endfunction
 
 function! LightlineFugitive()
