@@ -15,6 +15,12 @@ gitconfig-install:
 gitconfig-uninstall:
 	-@rm -f ~/.gitconfig
 
+ssh-install:
+	@ln -fs ${PWD}/ssh/config ~/.ssh/config
+
+ssh-uninstall:
+	-@rm -f ~/.ssh/config
+
 vim-plugins:
 	@git submodule init
 	@git submodule update --remote --merge
