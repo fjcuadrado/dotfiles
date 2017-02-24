@@ -3,7 +3,7 @@ set nocompatible
 
 "Using pathogen to load plugins
 filetype off
-let g:pathogen_disabled = ['pathogen']  "Prevent pathogen from self-sourcing
+let g:pathogen_disabled = ["pathogen"]  "Prevent pathogen from self-sourcing
 call pathogen#infect()
 call pathogen#helptags()
 
@@ -88,49 +88,56 @@ autocmd BufNewFile,BufRead *.var set filetype=sh
 autocmd BufNewFile,BufRead *.h set filetype=c
 
 "ALE configuration
-let g:ale_sign_error = '●'
-let g:ale_sign_warning = '●'
-let g:ale_statusline_format = ['✗ %d', '! %d', '✓']
-let g:ale_echo_msg_format = '[%linter%] %s'
+let g:ale_sign_error = "●"
+let g:ale_sign_warning = "●"
+let g:ale_statusline_format = ["✗ %d", "! %d", "✓"]
+let g:ale_echo_msg_format = "[%linter%] %s"
+
+"Neosnippet configuration
+imap <expr><TAB> pumvisible() ? "\<C-n>"
+                 \ : neosnippet#expandable_or_jumpable()
+                 \ ? "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+smap <expr><TAB> neosnippet#expandable_or_jumpable()
+                 \ ? "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
 
 "Lightline configuration
 let g:lightline = {
-    \   'active': {
-    \       'left': [
-    \           ['mode', 'paste'],
-    \           ['filename'],
-    \           ['fugitive']
+    \   "active": {
+    \       "left": [
+    \           ["mode", "paste"],
+    \           ["filename"],
+    \           ["fugitive"]
     \       ],
-    \       'right': [
-    \           ['lineinfo'],
-    \           ['fileformat', 'fileencoding'],
-    \           ['filetype']
+    \       "right": [
+    \           ["lineinfo"],
+    \           ["fileformat", "fileencoding"],
+    \           ["filetype"]
     \       ]
     \   },
-    \   'component_function': {
-    \       'filename': 'LightlineFilename',
-    \       'filetype': 'LightlineFiletype',
-    \       'fugitive': 'LightlineFugitive',
+    \   "component_function": {
+    \       "filename": "LightlineFilename",
+    \       "filetype": "LightlineFiletype",
+    \       "fugitive": "LightlineFugitive",
     \   }
     \ }
 
 function! LightlineFilename()
-    let filename = expand('%t')
-    return (&readonly ? '[RO] ' : '')
-           \ . (empty(filename) ? '[No name]' : filename)
-           \ . (&modified ? ' +' : '')
+    let filename = expand("%t")
+    return (&readonly ? "[RO] " : "")
+           \ . (empty(filename) ? "[No name]" : filename)
+           \ . (&modified ? " +" : "")
 endfunction
 
 function! LightlineFiletype()
     let ale_status = ALEGetStatusLine()
-    return ale_status . ' ' . &ft
+    return ale_status . " " . &ft
 endfunction
 
 function! LightlineFugitive()
-    if exists('*fugitive#head')
+    if exists("*fugitive#head")
         let branch = fugitive#head()
-        let mark = ''
-        return branch !=# '-' ? mark.branch : ''
+        let symbol = ""
+        return branch !=# "-" ? symbol . branch : ""
     endif
-    return ''
+    return ""
 endfunction
