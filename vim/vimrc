@@ -17,6 +17,10 @@ set termguicolors
 syntax on
 colorscheme molokai
 
+"Enable italic
+set t_ZH=[3m
+set t_ZR=[23m
+
 "Use utf-8 encoding
 scriptencoding utf-8
 set encoding=utf-8
