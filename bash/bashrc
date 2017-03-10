@@ -32,7 +32,7 @@ export EDITOR="vim"
 alias grep="grep --color=auto"
 alias ls="ls --color=auto --group-directories-first"
 alias rm="rm -i"
-alias vi="$(wich vim)"
+alias vi="$(which vim)"
 
 # If not running in a truecolor terminal, don't do anything more
 [ "$COLORTERM" != "truecolor" -a "$COLORTERM" != "24bit" ] && return
