@@ -11,7 +11,7 @@ HISTCONTROL=ignoreboth
 HISTFILE="$HOME/.histfile"
 HISTFILESIZE=2000
 HISTSIZE=1000
-HISTIGNORE='bg:clear:deactivate:fg:history*:ls*:reset:rm*'
+HISTIGNORE='bg:clear:deactivate:fg:history*:ls*:reset:rm*:su*:sudo*'
 
 shopt -s cmdhist
 shopt -s histappend
