@@ -1,0 +1,147 @@
+"Don't be compatible with vi
+set nocompatible
+
+"Using pathogen to load plugins
+filetype off
+let g:pathogen_disabled = ["pathogen"]  "Prevent pathogen from self-sourcing
+call pathogen#infect()
+call pathogen#helptags()
+
+"Filetype plugin
+filetype on
+filetype plugin on
+filetype indent on
+
+"Theme settings
+set termguicolors
+syntax on
+colorscheme molokai
+
+"Enable italic
+set t_ZH=[3m
+set t_ZR=[23m
+
+"Use utf-8 encoding
+scriptencoding utf-8
+set encoding=utf-8
+set termencoding=utf-8
+set fileencoding=utf-8
+set fileformats=unix,dos,mac
+
+"Don't create netrwhist
+let g:netrw_dirhistmax = 0
+
+"Basic settings
+set title
+set cursorline
+set ruler
+set number
+set autoread
+set ttyfast
+set mousehide
+set backspace=indent,eol,start
+set colorcolumn=80
+set signcolumn=yes
+
+"Status line
+set laststatus=2
+set noshowmode
+
+"vim windows
+set splitright
+set splitbelow
+
+"Disable backup files
+set nobackup
+set nowritebackup
+
+"Spaces instead of tabs
+set autoindent
+set smartindent
+set smarttab
+set expandtab
+set tabstop=4
+set shiftwidth=4
+set softtabstop=4
+
+"Search options
+set hlsearch    "Highlight results
+set incsearch   "Search as you write
+set ignorecase  "Search case-insensitive terms
+set smartcase   "Use capital letters to search case-sensitive terms
+
+"Treat long lines as line breaks
+nmap j gj
+vmap j gj
+nmap k gk
+vmap k gk
+
+"Highlight trailing whitespaces
+highlight TrailWhitespace ctermbg=red guibg=red
+match TrailWhitespace /\s\+$\| \+\ze\t/
+
+"Wrap markdown long lines
+autocmd BufNewFile,BufRead *.md set wrap linebreak nolist
+autocmd BufNewFile,BufRead *.md set columns=80
+
+"Set filetype shell to subr and vars files
+autocmd BufNewFile,BufRead *.subr set filetype=sh
+autocmd BufNewFile,BufRead *.var set filetype=sh
+
+"Set filetype C to header files
+autocmd BufNewFile,BufRead *.h set filetype=c
+
+"ALE configuration
+let g:ale_sign_error = "●"
+let g:ale_sign_warning = "●"
+let g:ale_statusline_format = ["✗ %d", "! %d", "✓"]
+let g:ale_echo_msg_format = "[%linter%] %s"
+
+"Neosnippet configuration
+imap <expr><TAB> pumvisible() ? "\<C-n>"
+                 \ : neosnippet#expandable_or_jumpable()
+                 \ ? "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+smap <expr><TAB> neosnippet#expandable_or_jumpable()
+                 \ ? "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+
+"Lightline configuration
+let g:lightline = {
+    \   "active": {
+    \       "left": [
+    \           ["mode", "paste"],
+    \           ["filename"],
+    \           ["fugitive"]
+    \       ],
+    \       "right": [
+    \           ["lineinfo"],
+    \           ["fileformat", "fileencoding"],
+    \           ["filetype"]
+    \       ]
+    \   },
+    \   "component_function": {
+    \       "filename": "LightlineFilename",
+    \       "filetype": "LightlineFiletype",
+    \       "fugitive": "LightlineFugitive",
+    \   }
+    \ }
+
+function! LightlineFilename()
+    let filename = expand("%t")
+    return (&readonly ? "[RO] " : "")
+           \ . (empty(filename) ? "[No name]" : filename)
+           \ . (&modified ? " +" : "")
+endfunction
+
+function! LightlineFiletype()
+    let ale_status = ALEGetStatusLine()
+    return ale_status . " " . &ft
+endfunction
+
+function! LightlineFugitive()
+    if exists("*fugitive#head")
+        let branch = fugitive#head()
+        let symbol = ""
+        return branch !=# "-" ? symbol . branch : ""
+    endif
+    return ""
+endfunction
