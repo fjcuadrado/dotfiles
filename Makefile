@@ -4,10 +4,16 @@
 PWD = `pwd`
 
 
-all: gitconfig-install vim-install
+all: bash-install gitconfig-install ssh-install vim-install
 
-clean: gitconfig-uninstall vim-uninstall
+clean: bash-uninstall gitconfig-uninstall ssh-uninstall vim-uninstall
 
+bash-install:
+	@ln -fs ${PWD}/bash/bashrc ~/.bashrc
+	@ln -fs ${PWD}/bash/profile ~/.profile
+
+bash-uninstall:
+	-@rm -f ~/.bashrc ~/.profile
 
 gitconfig-install:
 	@ln -fs ${PWD}/git/gitconfig ~/.gitconfig
