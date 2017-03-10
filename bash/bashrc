@@ -1,0 +1,57 @@
+# ~/.bashrc: executed by bash(1) for non-login shells.
+
+# If not running interactively, don't do anything
+[ -z "$PS1" ] && return
+
+# Check window size after each command
+shopt -s checkwinsize
+
+# History settings
+HISTCONTROL=ignoreboth
+HISTFILE="$HOME/.histfile"
+HISTFILESIZE=2000
+HISTSIZE=1000
+HISTIGNORE='bg:deactivate:fg:history*:ls*:rm*'
+
+shopt -s cmdhist
+shopt -s histappend
+
+# Enable color support via dircolors
+if [ -x /usr/bin/dircolors ]; then
+    if [ -f ~/.dircolors ]; then
+        eval "$(dircolors -b ~/.dircolors)"
+    else
+        eval "$(dircolors -b)"
+    fi
+fi
+
+# Useful environment variables
+export EDITOR="vim"
+
+# Useful aliases
+alias grep="grep --color=auto"
+alias ls="ls --color=auto --group-directories-first"
+alias rm="rm -i"
+alias vi="$(wich vim)"
+
+# If not running in a truecolor terminal, don't do anything more
+[ "$COLORTERM" != "truecolor" -a "$COLORTERM" != "24bit" ] && return
+
+# Bash prompt colors
+COLOR_USER='\[\e[38;2;166;226;46m\]'
+COLOR_ROOT='\[\e[38;2;249;38;114m\]'
+COLOR_SSH='\[\e[38;2;253;151;31m\]'
+COLOR_PATH='\[\e[38;2;102;217;239m\]'
+COLOR_RESET='\[\e[m\]'
+
+if [ ${EUID} == 0 ]; then
+    PS1=$COLOR_ROOT'\u@\h'$COLOR_RESET':'$COLOR_PATH'\w'$COLOR_ROOT'\$ '$COLOR_RESET
+
+elif [ -n "$SSH_CLIENT" ]; then
+    PS1=$COLOR_SSH'\u@\h'$COLOR_RESET':'$COLOR_PATH'\w'$COLOR_SSH'\$ '$COLOR_RESET
+
+else
+    PS1=$COLOR_USER'\u@\h'$COLOR_RESET':'$COLOR_PATH'\w'$COLOR_USER'\$ '$COLOR_RESET
+fi
+
+PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME}:${PWD/$HOME/~}\007"'
