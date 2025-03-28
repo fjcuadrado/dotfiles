@@ -1,0 +1,17 @@
+Host *
+    Protocol 2
+    Compression yes
+    ConnectTimeout 180
+    ServerAliveInterval 90
+    HashKnownHosts no
+
+    # Don't forward X11 connections
+    ForwardX11 no
+
+    # Don't try to authenticate with Kerberos
+    GSSAPIAuthentication no
+
+    # Reuse an existing connection
+    ControlMaster auto
+    ControlPath ~/.ssh/master-%r@%h:%p
+    ControlPersist 5m

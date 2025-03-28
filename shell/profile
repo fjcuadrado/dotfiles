@@ -1,0 +1,14 @@
+# ~/.profile: executed by bash(1) for login shells. It's not read if
+# '~/.bash_profile' or '~/.bash_login' exists.
+
+# If running bash, include '~/.bashrc' if it exists
+if [ -n "$BASH_VERSION" ]; then
+    if [ -f "$HOME/.bashrc" ]; then
+        source "$HOME/.bashrc"
+    fi
+fi
+
+# Append local binaries directory to PATH
+if [ -d "$HOME/.local/bin" ]; then
+    PATH="$PATH:$HOME/.local/bin"
+fi
