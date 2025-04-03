@@ -1,0 +1,69 @@
+# ~/.bashrc: executed by bash(1) for non-login shells.
+
+# If not running interactively, don't do anything
+[ -z "$PS1" ] && return
+
+# Check window size after each command
+shopt -s checkwinsize
+
+# Save multiline commands in history as one entry
+shopt -s cmdhist
+shopt -s histappend
+
+# History settings
+HISTCONTROL="ignoreboth:erasedups"
+HISTFILE="$HOME/.cache/histfile"
+HISTFILESIZE=2000
+HISTSIZE=1000
+HISTIGNORE='bg:clear:deactivate:fg:history*:ls*:reset:rm*:su*:sudo*'
+
+# Set terminal window title when the prompt is shown
+PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME}:${PWD/$HOME/~}\007"'
+
+# Homebrew stuff (only for MacOS)
+if [ -x "/opt/homebrew/bin/brew" ]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+
+# Environment variables
+export EDITOR="$(command -v vim)"
+export LESSHISTFILE="$HOME/.cache/lesshst"
+export MORE="--exit-on-eof"
+export MYPY_CACHE_DIR="$HOME/.cache/mypy"
+export PAGER="$(command -v less)"
+export RUFF_CACHE_DIR="$HOME/.cache/ruff"
+
+# Aliases
+alias diff="diff --color=auto"
+alias grep="grep --color=auto"
+alias ls="ls --color=auto"
+alias rm="rm -i"
+alias vi="$(command -v vim)"
+
+# Enable bash completion
+[ -r "$HOMEBREW_PREFIX/etc/profile.d/bash_completion.sh" ] \
+    && source "$HOMEBREW_PREFIX/etc/profile.d/bash_completion.sh"
+
+# If not running in a truecolor terminal, don't do anything more
+[ "$COLORTERM" != "truecolor" -a "$COLORTERM" != "24bit" ] && return
+
+# Bash prompt colors
+COLOR_USER='\[\e[38;2;166;226;46m\]'
+COLOR_ROOT='\[\e[38;2;249;38;114m\]'
+COLOR_PATH='\[\e[38;2;102;217;239m\]'
+COLOR_RESET='\[\e[m\]'
+
+if [ ${EUID} == 0 ]; then
+    PS1="$COLOR_ROOT\u@\h$COLOR_RESET:$COLOR_PATH\w$COLOR_ROOT\$ $COLOR_RESET"
+else
+    PS1="$COLOR_USER\u@\h$COLOR_RESET:$COLOR_PATH\w$COLOR_USER\$ $COLOR_RESET"
+fi
+
+# Enable color support via dircolors
+if [ -x "/usr/bin/dircolors" ]; then
+    if [ -f "~/.dircolors" ]; then
+        eval "$(dircolors -b ~/.dircolors)"
+    else
+        eval "$(dircolors -b)"
+    fi
+fi

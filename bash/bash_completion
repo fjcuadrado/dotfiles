@@ -1,0 +1,11 @@
+# Enable ruff completion
+[ -x "$(command -v ruff)" ] \
+    && eval "$(ruff generate-shell-completion bash)"
+
+# Enable ruff completion
+[ -x "$(command -v uv)" ] \
+    && eval "$(uv generate-shell-completion bash)"
+
+# Enable ruff completion
+[ -x "$(command -v uvx)" ] \
+    && eval "$(uvx --generate-shell-completion bash)"

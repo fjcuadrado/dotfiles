@@ -1,0 +1,147 @@
+" Don't be compatible with vi
+set nocompatible
+set nomodeline
+
+" Disable banner
+set shortmess+=I
+
+" Filetype plugin
+filetype on
+filetype plugin on
+filetype indent on
+
+" Theme settings
+set termguicolors
+syntax on
+colorscheme molokai
+
+" Enable italic
+set t_ZH=[3m
+set t_ZR=[23m
+
+" Use utf-8 encoding
+scriptencoding utf-8
+set encoding=utf-8
+set termencoding=utf-8
+set fileencoding=utf-8
+set fileformats=unix,dos,mac
+
+" Don't create netrwhist
+let g:netrw_dirhistmax = 0
+
+" Don't store viminfo in a file
+set viminfofile=NONE
+
+" Basic settings
+set title
+set cursorline
+set ruler
+set number
+set autoread
+set ttyfast
+set mousehide
+set backspace=indent,eol,start
+set colorcolumn=80
+set signcolumn=yes
+
+" Status line
+set laststatus=2
+set noshowmode
+
+" Open new panes to right and bottom
+set splitright
+set splitbelow
+
+" Disable backup files
+set nobackup
+set nowritebackup
+
+" Spaces instead of tabs
+set autoindent
+set smartindent
+set smarttab
+set expandtab
+set tabstop=4
+set shiftwidth=4
+set softtabstop=4
+
+" Search options
+set hlsearch    " Highlight results
+set incsearch   " Search as you write
+set ignorecase  " Search case-insensitive terms
+set smartcase   " Use capital letters to search case-sensitive terms
+
+" Treat long lines as line breaks
+nmap j gj
+vmap j gj
+nmap k gk
+vmap k gk
+
+" Highlight trailing whitespaces
+highlight TrailWhitespace ctermbg=red guibg=red
+match TrailWhitespace /\s\+$/
+
+" ALE configuration
+let g:ale_echo_msg_format = "[%linter%] %s"
+let g:ale_virtualtext_cursor = "disabled"
+let g:ale_set_highlights = 0
+let g:ale_sign_error = "●"
+let g:ale_sign_warning = "●"
+
+" Lightline configuration
+let g:lightline = {
+    \   "active": {
+    \       "left": [
+    \           ["mode", "paste"],
+    \           ["filename"],
+    \           ["gitbranch"],
+    \       ],
+    \       "right": [
+    \           ["lineinfo"],
+    \           ["fileformat", "fileencoding"],
+    \           ["linter_status", "filetype"],
+    \       ],
+    \   },
+    \   "component_function": {
+    \       "filename": "LightlineFilename",
+    \       "gitbranch": "LightlineGitBranch",
+    \       "linter_status": "LightlineAleStatus",
+    \   },
+    \ }
+
+function! LightlineAleStatus()
+    let l:counts = ale#statusline#Count(bufnr(''))
+    if l:counts.total == 0
+        return "✓"
+    endif
+
+    let l:indicators = []
+    let l:all_errors = l:counts.error + l:counts.style_error
+    let l:error_indicator = l:all_errors == 0 ? "" : printf("✗ %d", all_errors)
+    if !empty(l:error_indicator)
+        call add(l:indicators, l:error_indicator)
+    endif
+
+    let l:all_warns = l:counts.warning + l:counts.style_warning
+    let l:warning_indicator = l:all_warns == 0 ? "" : printf("! %d", all_warns)
+    if !empty(l:warning_indicator)
+        call add(l:indicators, l:warning_indicator)
+    endif
+
+    return join(l:indicators, " ")
+endfunction
+
+function! LightlineFilename()
+    let l:filename = expand("%:t")
+    return (&readonly ? "\ue0a2 " : "")
+           \ . (empty(l:filename) ? "[No name]" : l:filename)
+           \ . (&modified ? " +" : "")
+endfunction
+
+function! LightlineGitBranch()
+    let l:branch = FugitiveHead()
+    if empty(l:branch)
+        return ""
+    endif
+    return "\ue0a0 " . l:branch
+endfunction

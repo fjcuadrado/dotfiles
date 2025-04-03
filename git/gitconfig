@@ -1,0 +1,11 @@
+[core]
+    editor = vim
+
+[init]
+    defaultBranch = main
+
+[merge]
+    ff = false
+
+[pull]
+    rebase = true
