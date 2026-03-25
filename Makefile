@@ -36,6 +36,6 @@ ssh: .ssh/config
 
 vim: .config/vim
 	@git submodule init
-	@git submodule update --merge --remote
+	@git submodule update --rebase --recursive --remote
 
 .PHONY: all bash git ssh vim
